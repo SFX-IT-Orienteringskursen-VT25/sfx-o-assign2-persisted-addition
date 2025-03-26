@@ -29,7 +29,18 @@
     
         let enteredNumbers = [];
         let sum = 0;
-    
+        window.onload = function() {
+            const storedNumber = localStorage.getItem('enteredNumbers');
+            const storedSum = localStorage.getItem('sum');
+            if (storedNumber) {
+                enteredNumbers = JSON.parse(storedNumber);
+                numberList.textContent = enteredNumbers.join(' + ');
+            }
+            if (storedSum) {
+                sum = parseInt(storedSum, 10);
+                totalSum.textContent = sum;
+            }
+        };
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -46,6 +57,9 @@
             numberList.textContent = enteredNumbers.join(' + ');
             totalSum.textContent = sum;
 
+          
+            localStorage.setItem('enteredNumbers', JSON.stringify(enteredNumbers)); 
+            localStorage.setItem('sum', sum);
             numberInput.value = '';
             numberInput.focus();
         });
