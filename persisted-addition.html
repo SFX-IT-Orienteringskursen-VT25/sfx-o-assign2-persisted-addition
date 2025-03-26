@@ -30,9 +30,26 @@
         let enteredNumbers = [];
         let sum = 0;
     
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+        function getStoredNumbers() {
+            return JSON.parse(localStorage.getItem('numbers')) || [];
+        }
 
+        function saveNumbers(numbers) {
+            localStorage.setItem('numbers', JSON.stringify(numbers));
+        }
+
+        function calculateSum(numbers) {
+            return numbers.reduce((sum, num) => sum + num, 0);
+        }
+
+        function updateUI(numbers) {
+            numberList.textContent = numbers.join(' + ') || "No numbers yet";
+            totalSum.textContent = calculateSum(numbers);
+        }
+
+        function addNumber() {
+            const number = numberInput.value.trim();
+            
             // Check if input is a valid integer (no decimals, no empty input)
             if (!/^-?\d+$/.test(number)) { 
                 alert('Please enter a valid integer.');
@@ -40,15 +57,21 @@
             }
 
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+            let numbers = getStoredNumbers();
+            numbers.push(numValue);
+            saveNumbers(numbers);
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
+            updateUI(numbers);
             numberInput.value = '';
             numberInput.focus();
-        });
+        }
+
+        addButton.addEventListener('click', addNumber);
+
+        // 加载时恢复
+        window.onload = function () {
+            updateUI(getStoredNumbers());
+        };
     </script>
 </body>
 </html>
