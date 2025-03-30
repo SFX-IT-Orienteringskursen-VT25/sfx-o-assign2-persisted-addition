@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +11,8 @@
         <h1>Add a Number and Summarize Them</h1>
         <p>Enter a number below. The calculator will correctly summarize the numbers.</p>
         <p><strong>Bonus improvement:</strong> Prevents adding invalid inputs.</p>
-
-        <input type="text" id="numberInput" placeholder="Enter an integer">
+        <!-- Only allow number with type `number` or alternative to use pattern attribute -->
+        <input id="numberInput" type="number" min="0" placeholder="Enter an integer" />
         <button id="addButton">Add Number</button>
 
         <div class="list">
@@ -22,58 +21,39 @@
             <h3><span id="totalSum">0</span></h3>
         </div>
     </div>
-    <!--测试 1110-->
-    <script>
+
+    <script async type="module">
+        import Operation from "./operation-service.js";
+
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
 
-        let enteredNumbers = [];
-        let sum = 0;
+        const operationService = new Operation();
 
-        function getStoredNumbers() {
-            return JSON.parse(localStorage.getItem('numbers')) || [];
-        }
-
-        function saveNumbers(numbers) {
-            localStorage.setItem('numbers', JSON.stringify(numbers));
-        }
-
-        function calculateSum(numbers) {
-            return numbers.reduce((sum, num) => sum + num, 0);
-        }
-
-        function updateUI(numbers) {
-            numberList.textContent = numbers.join(' + ') || "No numbers yet";
-            totalSum.textContent = calculateSum(numbers);
-        }
-
-        function addNumber() {
-            const number = numberInput.value.trim();
-
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) {
-                alert('Please enter a valid integer.');
-                return;
-            }
-
-            const numValue = parseInt(number, 10);
-            let numbers = getStoredNumbers();
-            numbers.push(numValue);
-            saveNumbers(numbers);
-
-            updateUI(numbers);
+        const clearInput = () => {
             numberInput.value = '';
             numberInput.focus();
         }
 
-        addButton.addEventListener('click', addNumber);
+        const addNumber = () => {
+            const numbers = operationService.getLocalStorage();
+            numbers.push(parseInt(numberInput.value.trim()));
+            operationService.setLocalStorage(numbers);
+            printTotal(operationService.getLocalStorage());
+            clearInput();
+        }
 
-        // 加载时恢复
-        window.onload = function () {
-            updateUI(getStoredNumbers());
-        };
+        const printTotal = (numbers) => {
+            numberList.textContent = numbers.join(' + ') || "No numbers yet";
+            totalSum.textContent = operationService.calculateSum(numbers);
+        }
+
+        addButton.addEventListener('click', () => addNumber());
+
+        window.onload = () => printTotal(operationService.getLocalStorage());
+
     </script>
 </body>
 
