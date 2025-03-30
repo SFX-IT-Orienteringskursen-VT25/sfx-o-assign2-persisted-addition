@@ -1,0 +1,23 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "Clone this repository",
+  "main": "calculateSum.test.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition/issues"
+  },
+  "homepage": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
