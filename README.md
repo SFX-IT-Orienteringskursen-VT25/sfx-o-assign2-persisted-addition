@@ -1,5 +1,6 @@
 # sfx-o-assign2-persisted-addition
 Clone this repository
+
 Create a branch
 
 New requirements that need to be met:
@@ -8,6 +9,9 @@ New requirements that need to be met:
 - The function above should be unit tested
 
 Commit
+
 Push your branch
-Create a pull request <your branch> => <main>
+
+Create a pull request \<your branch\> => \<main\>
+
 Done!
