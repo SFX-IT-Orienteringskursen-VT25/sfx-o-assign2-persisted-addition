@@ -1,0 +1,17 @@
+{
+  "name": "persisted_data_testing",
+  "version": "1.0.0",
+  "description": "testing persisted data",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.27.0",
+    "jest": "^29.7.0"
+  }
+}
