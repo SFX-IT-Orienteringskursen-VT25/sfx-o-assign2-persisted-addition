@@ -1,54 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add and Summarize Numbers</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>Add a Number and Summarize Them</h1>
-        <p>Enter a number below. The calculator will correctly summarize the numbers.</p>
-        <p><strong>Bonus improvement:</strong> Prevents adding invalid inputs.</p>
-        
-        <input type="text" id="numberInput" placeholder="Enter an integer">
-        <button id="addButton">Add Number</button>
-        
-        <div class="list">
-            <div id="numberList"></div>
-            =
-            <h3><span id="totalSum">0</span></h3>
-        </div>
+      <h1>Add a Number and Summarize Them</h1>
+      <p>
+        Enter a number below. The calculator will correctly summarize the
+        numbers.
+      </p>
+      <p><strong>Bonus improvement:</strong> Prevents adding invalid inputs.</p>
+
+      <input type="text" id="numberInput" placeholder="Enter an integer" />
+      <button id="addButton">Add Number</button>
+
+      <div class="list">
+        <div id="numberList"></div>
+        =
+        <h3><span id="totalSum">0</span></h3>
+      </div>
     </div>
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+    <script type="module">
+      import { CalculatorService } from "./calculatorService.js";
+      const numberInput = document.getElementById("numberInput");
+      const addButton = document.getElementById("addButton");
+      const numberList = document.getElementById("numberList");
+      const totalSum = document.getElementById("totalSum");
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+      const calculatorService = new CalculatorService(localStorage);
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+      const storedNumbers = calculatorService.getStoredNumbers();
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+      const sum = calculatorService.getSum();
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
+      numberList.textContent = storedNumbers.join(" + ");
+      totalSum.textContent = sum;
+
+      addButton.addEventListener("click", function () {
+        const number = numberInput.value.trim();
+
+        // Check if input is a valid integer (no decimals, no empty input)
+        if (!/^-?\d+$/.test(number)) {
+          alert("Please enter a valid integer.");
+          return;
+        }
+
+        const numValue = parseInt(number, 10);
+        const { numbers: updatedStoredNumbers, sum: newSum } =
+          calculatorService.addNumberAndSummarize(numValue);
+
+        numberList.textContent = updatedStoredNumbers.join(" + ");
+        totalSum.textContent = newSum;
+
+        numberInput.value = "";
+        numberInput.focus();
+      });
     </script>
-</body>
+  </body>
 </html>
