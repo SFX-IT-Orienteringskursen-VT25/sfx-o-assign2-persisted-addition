@@ -3,6 +3,8 @@
  * https://jestjs.io/docs/configuration
  */
 
+const { test } = require('mocha');
+
 /** @type {import('jest').Config} */
 const config = {
   // All imported modules in your tests should be mocked automatically
@@ -197,9 +199,13 @@ const config = {
 
 module.exports = {
 
-  
-  setupFiles: [
-    "<rootDir>/jest.setup.js" // Correct relative path to your setup file
-  ],
+
+
+  transform: {
+    "^.+\\.[t|j]sx?$": "babel-jest", // Use babel-jest to transpile JS and JSX files
+    "^.+\\.html$": "jest-transform-stub"
+  },
 };
+
+
 //module.exports = config;
