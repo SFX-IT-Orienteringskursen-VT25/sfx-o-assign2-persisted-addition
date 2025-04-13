@@ -22,55 +22,19 @@
             <h3><span id="totalSum">0</span></h3>
         </div>
     </div>
-    <!--测试 1110-->
+
+    <!-- ✅ Load logic functions -->
+<script src="main.js"></script>
+
+<!-- ✅ Event bindings and page loading -->
     <script>
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
 
-        let enteredNumbers = [];
-        let sum = 0;
-
-        function getStoredNumbers() {
-            return JSON.parse(localStorage.getItem('numbers')) || [];
-        }
-
-        function saveNumbers(numbers) {
-            localStorage.setItem('numbers', JSON.stringify(numbers));
-        }
-
-        function calculateSum(numbers) {
-            return numbers.reduce((sum, num) => sum + num, 0);
-        }
-
-        function updateUI(numbers) {
-            numberList.textContent = numbers.join(' + ') || "No numbers yet";
-            totalSum.textContent = calculateSum(numbers);
-        }
-
-        function addNumber() {
-            const number = numberInput.value.trim();
-
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) {
-                alert('Please enter a valid integer.');
-                return;
-            }
-
-            const numValue = parseInt(number, 10);
-            let numbers = getStoredNumbers();
-            numbers.push(numValue);
-            saveNumbers(numbers);
-
-            updateUI(numbers);
-            numberInput.value = '';
-            numberInput.focus();
-        }
-
         addButton.addEventListener('click', addNumber);
 
-        // 加载时恢复
         window.onload = function () {
             updateUI(getStoredNumbers());
         };
