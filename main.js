@@ -1,34 +1,37 @@
-import { getStoredNumbers, addNumberToStorage, calculateSum } from './utils/storage.js';
+import { handleNumbers } from "./scripts/storage.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-    const numberInput = document.getElementById('numberInput');
-    const addButton = document.getElementById('addButton');
-    const numberList = document.getElementById('numberList');
-    const totalSum = document.getElementById('totalSum');
+const numberInput = document.getElementById("numberInput");
+const addButton = document.getElementById("addButton");
+const numberList = document.getElementById("numberList");
+const totalSum = document.getElementById("totalSum");
 
-    function updateUI(numbers) {
-        numberList.textContent = numbers.join(' + ') || "No numbers yet";
-        totalSum.textContent = calculateSum(numbers);
-    }
+function updateUI() {
+  const { enteredNumbers, sum } = handleNumbers("read");
+  numberList.textContent = enteredNumbers.join(" + ");
+  totalSum.textContent = sum;
+}
 
-    function addNumber() {
-        const number = numberInput.value.trim();
+function addNumber() {
+  const value = numberInput.value.trim();
 
-        if (!/^-?\d+$/.test(number)) {
-            alert('Please enter a valid integer.');
-            return;
-        }
+  if (!/^-?\d+$/.test(value)) {
+    alert("Please enter a valid integer.");
+    return;
+  }
 
-        const numValue = parseInt(number, 10);
-        const updatedNumbers = addNumberToStorage(numValue);
+  handleNumbers("add", parseInt(value, 10));
+  updateUI();
 
-        updateUI(updatedNumbers);
-        numberInput.value = '';
-        numberInput.focus();
-    }
+  numberInput.value = "";
+  numberInput.focus();
+}
 
-    addButton.addEventListener('click', addNumber);
+updateUI();
 
-    // Восстанавливаем сохраненные числа при загрузке
-    updateUI(getStoredNumbers());
+addButton.addEventListener("click", addNumber);
+
+numberInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    addNumber();
+  }
 });
