@@ -44,4 +44,15 @@ it('should not add a non-number', () => {
     expect(numberService.getSum()).toBe(0);
 
 });
+it('sum should be positive', () => {
+    numberService.addNumber(5);
+    numberService.addNumber(-3);
+    expect(numberService.getSum()).toBe(2);
+
+});
+it('should persist updated list when number is added', () => {
+    numberService.addNumber(4);
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('numbers', JSON.stringify([4]));
+});
+
 });

@@ -21,26 +21,35 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import {NumberService} from './numberService.js'; // Assuming numberService.js is in the same directory
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
+        const numberService = new NumberService(localStorage); // Create an instance of NumberService
+
+        function render(){
+            numberList.textContent = numberService.getNumbers().join(' + ');
+            totalSum.textContent = numberService.getSum();
+        }
+
+        render()
         let enteredNumbers = [];
         let sum = 0;
-        window.onload = function() {
-            const storedNumber = localStorage.getItem('enteredNumbers');
-            const storedSum = localStorage.getItem('sum');
-            if (storedNumber) {
-                enteredNumbers = JSON.parse(storedNumber);
-                numberList.textContent = enteredNumbers.join(' + ');
-            }
-            if (storedSum) {
-                sum = parseInt(storedSum, 10);
-                totalSum.textContent = sum;
-            }
-        };
+        // window.onload = function() {
+        //     const storedNumber = localStorage.getItem('enteredNumbers');
+        //     const storedSum = localStorage.getItem('sum');
+        //     if (storedNumber) {
+        //         enteredNumbers = JSON.parse(storedNumber);
+        //         numberList.textContent = enteredNumbers.join(' + ');
+        //     }
+        //     if (storedSum) {
+        //         sum = parseInt(storedSum, 10);
+        //         totalSum.textContent = sum;
+        //     }
+        // };
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -51,15 +60,10 @@
             }
 
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+            numberService.addNumber(numValue); // Use the NumberService to add the number
+            render()
+            
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
-          
-            localStorage.setItem('enteredNumbers', JSON.stringify(enteredNumbers)); 
-            localStorage.setItem('sum', sum);
             numberInput.value = '';
             numberInput.focus();
         });
