@@ -1,28 +1,21 @@
-// logic.test.js
-import { persistAndSummarize } from './logic';
+const fs = require('fs');
+const path = require('path');
+const { addAndSummarize } = require('./app');
 
-describe('persistAndSummarize', () => {
-  it('should return 0 sum for empty input', () => {
-    const result = persistAndSummarize([]);
-    expect(result.sum).toBe(0);
-    expect(result.numbers).toEqual([]);
-  });
+const dataPath = path.join(__dirname, 'data.json');
 
-  it('should return correct sum after adding number', () => {
-    const result = persistAndSummarize([1, 2], 3);
-    expect(result.sum).toBe(6);
-    expect(result.numbers).toEqual([1, 2, 3]);
-  });
+beforeEach(() => {
+    // 每次测试前重置文件内容
+    fs.writeFileSync(dataPath, JSON.stringify([]));
+});
 
-  it('should handle negative numbers', () => {
-    const result = persistAndSummarize([5, -2], -3);
-    expect(result.sum).toBe(0);
-    expect(result.numbers).toEqual([5, -2, -3]);
-  });
+test('adds numbers and returns correct sum', () => {
+    let result = addAndSummarize(5);
+    expect(result.sum).toBe(5);
 
-  it('should work with no new number added', () => {
-    const result = persistAndSummarize([4, 4]);
+    result = addAndSummarize(3);
     expect(result.sum).toBe(8);
-    expect(result.numbers).toEqual([4, 4]);
-  });
+
+    result = addAndSummarize(-1);
+    expect(result.sum).toBe(7);
 });
