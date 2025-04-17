@@ -32,3 +32,5 @@ function addNumber() {
     numberInput.value = '';
     numberInput.focus();
 }
+export { calculateSum, getStoredNumbers, saveNumbers };
+

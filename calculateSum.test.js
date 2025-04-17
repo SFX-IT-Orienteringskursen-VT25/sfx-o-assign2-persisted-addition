@@ -1,9 +1,19 @@
-function calculateSum(numbers) {
-  return numbers.reduce((sum, num) => sum + num, 0);
-}
+import { calculateSum } from './main.js';
 
-test('calculateSum adds up numbers correctly', () => {
-  const testData = [1, 2, 3];
-  const result = calculateSum(testData);
-  expect(result).toBe(6);
+describe('calculateSum', () => {
+  test('returns 0 for empty array', () => {
+    expect(calculateSum([])).toBe(0);
+  });
+
+  test('returns correct sum for positive numbers', () => {
+    expect(calculateSum([1, 2, 3])).toBe(6);
+  });
+
+  test('returns correct sum for negative numbers', () => {
+    expect(calculateSum([-1, -2, -3])).toBe(-6);
+  });
+
+  test('returns correct sum for mixed numbers', () => {
+    expect(calculateSum([-1, 2, 3])).toBe(4);
+  });
 });
