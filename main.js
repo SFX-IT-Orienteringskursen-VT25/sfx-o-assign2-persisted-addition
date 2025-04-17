@@ -48,7 +48,7 @@ function getStoredNumbers() {
     };
   }
   
-  // ✅ 仅在 Node.js 中导出函数以供 Jest 测试
+  // Only for Jest testing in Node.js
   if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = {
       calculateSum,
