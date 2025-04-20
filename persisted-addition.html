@@ -22,33 +22,92 @@
     </div>
 
     <script>
+        const STORAGE='persistedNumber';
+
+        function addOchPersistNumbers(number)
+        {
+            if (typeof number !== 'number' || !Number.isInteger(number)){
+                throw new Error ('enter a valid integer input');
+            }
+
+            const stored = localStorage.getItem(STORAGE);
+            const numbers = stored ? JSON.parse(stored):[];
+
+            numbers.push(number);
+            const sum = numbers.reduce((a,b) => a+b, 0);
+
+            localStorage.setItem(STORAGE, JSON.stringify(numbers));
+
+            return {numbers, sum};
+
+        }
+
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
-        let enteredNumbers = [];
-        let sum = 0;
+        loadAndDisplay();
     
         addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+            const input = numberInput.value.trim();
 
             // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
+            if (!/^-?\d+$/.test(input)) { 
                 alert('Please enter a valid integer.');
                 return;
             }
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            const result = addOchPersistNumbers(parseInt(input, 10));
+            updateDisplay(result.numbers, result.sum);
 
             numberInput.value = '';
             numberInput.focus();
         });
+
+        function loadAndDisplay(){
+            const stored = localStorage.getItem(STORAGE);
+            const numbers = stored?JSON.parse(stored):[];
+            const sum = numbers.reduce((a,b)=>a+b,0);
+            updateDisplay(numbers, sum);
+        }
+
+        function updateDisplay(numbers, sum)
+        {
+            numberList.textContent = numbers.join('+')||'0';
+            totalSum.textContent=sum;
+        }
+
+        function Testing(){
+            localStorage.clear();
+
+            let result;
+
+            result = addOchPersistNumbers(6);
+            console.assert(result.sum === 6 && result.numbers.length === 1, 'Test 1 failed');
+
+            result = addOchPersistNumbers(10);
+            console.assert(result.sum === 16 && result.numbers.length === 2, 'Test 2 failed');
+
+            try{
+                addOchPersistNumbers('not-a-number');
+                console.error('Test 3 Failed: should have thrown an error');
+            } catch (e) {
+                console.log('Test 3 Passed');
+    
+            }
+
+            try{
+                addOchPersistNumbers(4.5);
+                console.error('Test 4 Failed: should have thrown for non-integer');
+            } catch (e) {
+                console.log('Test 4 Passed');
+    
+            }
+        }
+
+        //Testing();
+
     </script>
 </body>
 </html>
