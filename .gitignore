@@ -4,6 +4,9 @@
 artifacts/
 dist/
 debug/
+venv/
+.venv/
+env/
 **/tests/currents/**
 **/tests/diffs/**
 node_modules
@@ -12,6 +15,11 @@ data-mongo
 build-info
 **/__diff_output__/**
 **/.angular/*
+
+# Python
+__pycache__/
+*.py[cod]
+**/__pycache__/ 
 
 # CI / CD
 !.github/actions/**/dist

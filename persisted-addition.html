@@ -27,28 +27,36 @@
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
-        let enteredNumbers = [];
-        let sum = 0;
+        async function updateUI() {
+            const response = await fetch('/numbers');
+            const data = await response.json();
+            numberList.textContent = data.numbers.join(' + ');
+            totalSum.textContent = data.total;
+        }
     
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
-
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
+        addButton.addEventListener('click', async () => {
+            const value = numberInput.value.trim();
+            if (!/^-?\d+$/.test(value)) {
                 alert('Please enter a valid integer.');
                 return;
             }
-
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
+            const number = parseInt(value, 10);
+            const response = await fetch('/numbers', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({number})
+            });
+            if (!response.ok) {
+                alert('Error: ' + (await response.json()).error);
+                return;
+            }
+            await updateUI();
             numberInput.value = '';
             numberInput.focus();
         });
+    
+        updateUI();
     </script>
+    
 </body>
 </html>
