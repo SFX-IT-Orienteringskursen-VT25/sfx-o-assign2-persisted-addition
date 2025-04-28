@@ -22,7 +22,8 @@
     </div>
 
     <script>
-        const numberInput = document.getElementById('numberInput');
+       
+       const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
@@ -33,21 +34,29 @@
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+            // Retrieve existing numbers from localStorage or initialize an empty array
+  const stored = localStorage.getItem('numbers');
+  const numbers = stored ? JSON.parse(stored) : [];
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+  // Convert input to a number
+  const parsedNum = parseFloat(number);
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+  // Validate the input
+  if (!isNaN(parsedNum)) {
+    // Add the new number to the array
+    numbers.push(parsedNum);
 
-            numberInput.value = '';
-            numberInput.focus();
+    // Update localStorage with the new array
+    localStorage.setItem('numbers', JSON.stringify(numbers));
+
+    // Calculate the sum of all numbers
+    const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+
+    totalSum.textContent =sum ;
+  } else {
+    console.log('Invalid number input.');
+    return null;
+  }
         });
     </script>
 </body>
