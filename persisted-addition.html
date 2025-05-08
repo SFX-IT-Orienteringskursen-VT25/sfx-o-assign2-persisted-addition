@@ -21,14 +21,18 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { NumberStorage } from './numberStorage.js';
+
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
-        let enteredNumbers = [];
-        let sum = 0;
+        // Restore values on load
+        const numberStore = new NumberStorage();
+        numberList.textContent = numberStore.enteredNumbers.join(' + ');
+        totalSum.textContent = numberStore.sum;
     
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
@@ -39,12 +43,16 @@
                 return;
             }
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+            try {
+                const numValue = parseInt(number, 10);
+                numberStore.addNumber(numValue);
+            } catch (e) {
+                alert(e);
+                return;
+            }
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            numberList.textContent = numberStore.enteredNumbers.join(' + ');
+            totalSum.textContent = numberStore.sum;
 
             numberInput.value = '';
             numberInput.focus();
