@@ -21,34 +21,37 @@
         </div>
     </div>
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+    <script type="module">
+    import { updateNumbersAndSummarize } from './numberManager.js';
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+    const numberInput = document.getElementById('numberInput');
+    const addButton = document.getElementById('addButton');
+    const numberList = document.getElementById('numberList');
+    const totalSum = document.getElementById('totalSum');
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+    function renderSummary(summary) {
+        numberList.textContent = summary.numbers.join(' + ');
+        totalSum.textContent = summary.sum;
+    }
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+    // Initial load
+    const init = updateNumbersAndSummarize(0); // dummy push
+    init.numbers.pop(); // undo dummy
+    localStorage.setItem('numbers', JSON.stringify(init.numbers));
+    renderSummary(init);
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
-    </script>
+    addButton.addEventListener('click', () => {
+        const value = numberInput.value.trim();
+        if (!/^-?\d+$/.test(value)) {
+            alert('Please enter a valid integer.');
+            return;
+        }
+
+        const summary = updateNumbersAndSummarize(parseInt(value, 10));
+        renderSummary(summary);
+        numberInput.value = '';
+        numberInput.focus();
+    });
+</script>
 </body>
 </html>
