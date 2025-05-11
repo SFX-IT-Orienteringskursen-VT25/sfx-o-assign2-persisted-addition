@@ -1,54 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add and Summarize Numbers</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add and Summarize Numbers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f7f7f7;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: auto;
+    }
+    input {
+      width: 200px;
+      padding: 8px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 8px 12px;
+    }
+    .list {
+      margin-top: 20px;
+    }
+    h3 {
+      display: inline;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Add a Number and Summarize Them</h1>
-        <p>Enter a number below. The calculator will correctly summarize the numbers.</p>
-        <p><strong>Bonus improvement:</strong> Prevents adding invalid inputs.</p>
-        
-        <input type="text" id="numberInput" placeholder="Enter an integer">
-        <button id="addButton">Add Number</button>
-        
-        <div class="list">
-            <div id="numberList"></div>
-            =
-            <h3><span id="totalSum">0</span></h3>
-        </div>
+  <div class="container">
+    <h1>Add a Number and Summarize</h1>
+    <p>Enter a number below. The calculator will summarize persisted numbers.</p>
+    <p><strong>Bonus:</strong> Prevents adding invalid inputs.</p>
+
+    <input type="text" id="numberInput" placeholder="Enter an integer" />
+    <button id="addButton">Add Number</button>
+
+    <div class="list">
+      <div id="numberList"></div>
+      =
+      <h3><span id="totalSum">0</span></h3>
     </div>
+  </div>
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+  <script>
+    const numberInput = document.getElementById('numberInput');
+    const addButton = document.getElementById('addButton');
+    const numberList = document.getElementById('numberList');
+    const totalSum = document.getElementById('totalSum');
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+    /**
+     * Persists new number (if provided), reads all numbers, returns sum.
+     */
+    function addAndSummarize(newNumber = null) {
+      let numbers = JSON.parse(localStorage.getItem('numbers') || '[]');
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+      if (newNumber !== null) {
+        numbers.push(newNumber);
+        localStorage.setItem('numbers', JSON.stringify(numbers));
+      }
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+      const sum = numbers.reduce((acc, num) => acc + num, 0);
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
-    </script>
+      // Update UI
+      numberList.textContent = numbers.join(' + ');
+      totalSum.textContent = sum;
+
+      return { numbers, sum };
+    }
+
+    // Initialize on load
+    window.onload = () => {
+      addAndSummarize();
+    };
+
+    addButton.addEventListener('click', () => {
+      const value = numberInput.value.trim();
+
+      // Only allow integers (no decimals, no empty strings)
+      if (!/^-?\d+$/.test(value)) {
+        alert('Please enter a valid integer.');
+        return;
+      }
+
+      const intValue = parseInt(value, 10);
+      addAndSummarize(intValue);
+
+      numberInput.value = '';
+      numberInput.focus();
+    });
+  </script>
 </body>
 </html>
