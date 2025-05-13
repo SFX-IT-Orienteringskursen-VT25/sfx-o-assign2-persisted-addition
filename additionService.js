@@ -1,22 +1,23 @@
+
 export class AdditionService {
-    constructor() {
-      this.numbers = [];
-    }
-  
-    addNumber(num) {
-      if (Number.isInteger(num)) {
-        this.numbers.push(num);
-      } else {
-        throw new Error("Only integers are allowed.");
-      }
-    }
-  
-    getSum() {
-      return this.numbers.reduce((a, b) => a + b, 0);
-    }
-  
-    getNumbers() {
-      return [...this.numbers];
-    }
+  constructor() {
+    this.history = [];
+    this.sum = 0;
   }
-  
+
+  add(num) {
+    if (!Number.isInteger(num)) {
+      throw new Error('Only integers are allowed');
+    }
+    this.history.push(num);
+    this.sum += num;
+  }
+
+  getSum() {
+    return this.sum;
+  }
+
+  getHistory() {
+    return [...this.history];
+  }
+}

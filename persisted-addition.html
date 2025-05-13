@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Persisted Addition</title>
+</head>
+<body>
+  <h1>Persisted Addition</h1>
+  <input type="number" id="num1" placeholder="Enter a number" />
+  <button id="addButton">Add</button>
+  <div id="sumDisplay">Sum: 0</div>
+  <ul id="history"></ul>
+
+  <script type="module">
+    import { AdditionService } from './additionService.js';
+
+    const service = new AdditionService();
+    const input = document.getElementById('num1');
+    const button = document.getElementById('addButton');
+    const sumDisplay = document.getElementById('sumDisplay');
+    const historyList = document.getElementById('history');
+
+    function render() {
+      sumDisplay.textContent = 'Sum: ' + service.getSum();
+      historyList.innerHTML = '';
+      service.getHistory().forEach((num) => {
+        const li = document.createElement('li');
+        li.textContent = num;
+        historyList.appendChild(li);
+      });
+    }
+
+    button.addEventListener('click', () => {
+      const value = parseInt(input.value, 10);
+      if (!isNaN(value)) {
+        service.add(value);
+        render();
+        input.value = '';
+      } else {
+        alert('Please enter a valid number');
+      }
+    });
+
+    render(); 
+  </script>
+</body>
+</html>
