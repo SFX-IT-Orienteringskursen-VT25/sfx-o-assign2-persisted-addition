@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add and Summarize Numbers</title>
 </head>
 <body>
@@ -21,34 +20,40 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import NumberManager from './numberManager.js';
+
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
+
+        const manager = new NumberManager();
+
+        function updateUI() {
+            const nums = manager.getNumbers();
+            numberList.textContent = nums.join(' + ');
+            totalSum.textContent = manager.summarize();
+        }
+
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
-
-            // Check if input is a valid integer (no decimals, no empty input)
             if (!/^-?\d+$/.test(number)) { 
                 alert('Please enter a valid integer.');
                 return;
             }
-
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
-            numberInput.value = '';
-            numberInput.focus();
+            try {
+                manager.addNumber(parseInt(number, 10));
+                updateUI();
+                numberInput.value = '';
+                numberInput.focus();
+            } catch (e) {
+                alert(e.message);
+            }
         });
+
+        // On load, update UI with persisted numbers
+        updateUI();
     </script>
 </body>
 </html>
