@@ -1,54 +1,48 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add and Summarize Numbers</title>
+  <meta charset="UTF-8">
+  <title>Persisted Addition</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Add a Number and Summarize Them</h1>
-        <p>Enter a number below. The calculator will correctly summarize the numbers.</p>
-        <p><strong>Bonus improvement:</strong> Prevents adding invalid inputs.</p>
-        
-        <input type="text" id="numberInput" placeholder="Enter an integer">
-        <button id="addButton">Add Number</button>
-        
-        <div class="list">
-            <div id="numberList"></div>
-            =
-            <h3><span id="totalSum">0</span></h3>
-        </div>
-    </div>
+  <h1>Persisted Addition</h1>
+  <input type="number" id="num1" placeholder="Enter a number" />
+  <button id="addButton">Add</button>
+  <div id="sumDisplay">Sum: 0</div>
+  <ul id="history"></ul>
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+  <script type="module">
+    import { AdditionService } from './additionService.js';
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+    const service = new AdditionService();
+    const input = document.getElementById('num1');
+    const button = document.getElementById('addButton');
+    const sumDisplay = document.getElementById('sumDisplay');
+    const historyList = document.getElementById('history');
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+    function render() {
+      sumDisplay.textContent = 'Sum: ' + service.getSum();
+      historyList.innerHTML = '';
+      service.getHistory().forEach((num) => {
+        const li = document.createElement('li');
+        li.textContent = num;
+        historyList.appendChild(li);
+      });
+    }
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+    button.addEventListener('click', () => {
+      const value = parseInt(input.value, 10);
+      if (!isNaN(value)) {
+        service.add(value);
+        render();
+        input.value = '';
+      } else {
+        alert('Please enter a valid number');
+      }
+    });
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
-    </script>
+    render(); 
+  </script>
 </body>
 </html>
