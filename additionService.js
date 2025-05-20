@@ -1,8 +1,8 @@
-
 export class AdditionService {
   constructor() {
-    this.history = [];
-    this.sum = 0;
+    const savedData = JSON.parse(localStorage.getItem('persistedAdditionData'));
+    this.history = savedData?.history || [];
+    this.sum = savedData?.sum || 0;
   }
 
   add(num) {
@@ -11,6 +11,7 @@ export class AdditionService {
     }
     this.history.push(num);
     this.sum += num;
+    this._save();
   }
 
   getSum() {
@@ -19,5 +20,13 @@ export class AdditionService {
 
   getHistory() {
     return [...this.history];
+  }
+
+  _save() {
+    const data = {
+      history: this.history,
+      sum: this.sum
+    };
+    localStorage.setItem('persistedAdditionData', JSON.stringify(data));
   }
 }
