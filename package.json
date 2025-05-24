@@ -1,0 +1,29 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "Clone this repository\r Create a branch",
+  "type": "module",
+  "main": "storageFunc.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition/issues"
+  },
+  "homepage": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "node-localstorage": "^3.0.5"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  }
+}
