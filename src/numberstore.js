@@ -1,16 +1,26 @@
-// babbelnumberstore.js
-const STORAGE_KEY = "persistedNumbers";
+const API_URL = 'http://localhost:3000/storage';
+const STORAGE_KEY = 'persistedNumbers';
 
-export function getStoredNumbers() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+async function fetchNumbers() {
+  try {
+    const res = await fetch(`${API_URL}/${STORAGE_KEY}`);
+    if (!res.ok) throw new Error('Failed to fetch');
+    const data = await res.json();
+    return data.value || [];
+  } catch (e) {
+    return [];
+  }
 }
 
-export function saveNumbers(numbers) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(numbers));
+async function saveNumbers(numbers) {
+  await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key: STORAGE_KEY, value: numbers }),
+  });
 }
 
-export function summarize(numbers) {
+function summarize(numbers) {
   const sum = numbers.reduce((a, b) => a + b, 0);
   return {
     count: numbers.length,
@@ -19,14 +29,15 @@ export function summarize(numbers) {
   };
 }
 
-export function addNumber(value) {
+async function addNumber(value) {
   const num = parseInt(value, 10);
   if (isNaN(num)) {
     return { success: false, message: "Invalid number" };
   }
-  const numbers = getStoredNumbers();
+
+  const numbers = await fetchNumbers();
   numbers.push(num);
-  saveNumbers(numbers);
+  await saveNumbers(numbers);
   return { success: true, summary: summarize(numbers) };
 }
 
@@ -36,15 +47,15 @@ export function numberStore() {
   const numberList = document.getElementById('numberList');
   const totalSum = document.getElementById('totalSum');
 
-  function updateUI() {
-    const numbers = getStoredNumbers();
-    numberList.innerHTML = numbers.join(', ');
+  async function updateUI() {
+    const numbers = await fetchNumbers();
+    numberList.textContent = numbers.join(', ');
     const { sum } = summarize(numbers);
     totalSum.textContent = sum;
   }
 
-  addButton.addEventListener('click', () => {
-    const result = addNumber(numberInput.value);
+  addButton.addEventListener('click', async () => {
+    const result = await addNumber(numberInput.value);
     if (result.success) {
       numberInput.value = '';
       updateUI();
@@ -53,6 +64,6 @@ export function numberStore() {
     }
   });
 
-  localStorage.removeItem(STORAGE_KEY);
   updateUI();
 }
+

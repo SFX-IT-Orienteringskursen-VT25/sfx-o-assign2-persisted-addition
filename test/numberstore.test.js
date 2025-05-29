@@ -1,46 +1,42 @@
 import assert from 'assert';
-import { addNumber, getStoredNumbers, summarize, saveNumbers } from '../dist/numberstore.js';
+import fetch from 'node-fetch';
+import { addNumber, fetchNumbers, summarize, saveNumbers } from '../src/numberstore.js';
 
-// Mock localStorage
-global.localStorage = {
-  store: {},
-  getItem(key) {
-    return this.store[key] || null;
-  },
-  setItem(key, value) {
-    this.store[key] = value;
-  },
-  removeItem(key) {
-    delete this.store[key];
-  },
-  clear() {
-    this.store = {};
-  }
-};
+// Patch fetch globally (Node.js)
+global.fetch = fetch;
 
-describe('Number Store', () => {
-  beforeEach(() => {
-    localStorage.clear();
+describe('Number Store (with REST API)', function () {
+  this.timeout(5000); // Allow for async delay
+
+  beforeEach(async () => {
+    // Clear data manually if needed, or reset via API
+    await fetch('http://localhost:3000/storage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: 'persistedNumbers', value: [] }),
+    });
   });
 
-  it('adds valid number and summarizes correctly', () => {
-    let result = addNumber("5");
+  it('adds valid number and summarizes correctly', async () => {
+    let result = await addNumber("5");
     assert.strictEqual(result.success, true);
     assert.strictEqual(result.summary.sum, 5);
 
-    result = addNumber("10");
+    result = await addNumber("10");
     assert.deepStrictEqual(result.summary, { count: 2, sum: 15, average: 7.5 });
   });
 
-  it('rejects invalid input', () => {
-    const result = addNumber("abc");
+  it('rejects invalid input', async () => {
+    const result = await addNumber("abc");
     assert.strictEqual(result.success, false);
-    assert.deepStrictEqual(getStoredNumbers(), []);
+
+    const numbers = await fetchNumbers();
+    assert.deepStrictEqual(numbers, []);
   });
 
-  it('summarizes manually stored numbers', () => {
-    saveNumbers([2, 4, 6]);
-    const summary = summarize(getStoredNumbers());
+  it('summarizes manually stored numbers', async () => {
+    await saveNumbers([2, 4, 6]);
+    const summary = summarize(await fetchNumbers());
     assert.deepStrictEqual(summary, { count: 3, sum: 12, average: 4 });
   });
 });
