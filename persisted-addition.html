@@ -1,54 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add and Summarize Numbers</title>
-</head>
-<body>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      input {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        width: 200px;
+        margin-right: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .list {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        font-size: 18px;
+        text-align: center;
+      }
+      .clear-btn {
+        background-color: #dc3545;
+        margin-left: 10px;
+      }
+      .clear-btn:hover {
+        background-color: #c82333;
+      }
+      #numberList {
+        min-height: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+      #totalSum {
+        color: #007bff;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
     <div class="container">
-        <h1>Add a Number and Summarize Them</h1>
-        <p>Enter a number below. The calculator will correctly summarize the numbers.</p>
-        <p><strong>Bonus improvement:</strong> Prevents adding invalid inputs.</p>
-        
-        <input type="text" id="numberInput" placeholder="Enter an integer">
+      <h1>Add a Number and Summarize Them</h1>
+      <p>
+        Enter a number below. The calculator will correctly summarize the
+        numbers and persist them in your browser.
+      </p>
+      <p>
+        <strong>Features:</strong> Input validation, data persistence, and error
+        handling.
+      </p>
+
+      <div style="text-align: center; margin: 30px 0">
+        <input type="text" id="numberInput" placeholder="Enter an integer" />
         <button id="addButton">Add Number</button>
-        
-        <div class="list">
-            <div id="numberList"></div>
-            =
-            <h3><span id="totalSum">0</span></h3>
-        </div>
+        <button id="clearButton" class="clear-btn">Clear All</button>
+      </div>
+
+      <div class="list">
+        <div id="numberList">No numbers yet</div>
+        <div style="font-size: 24px; margin: 20px 0">=</div>
+        <h3>Sum: <span id="totalSum">0</span></h3>
+      </div>
     </div>
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+    <script type="module">
+      
+      class LocalStorage {
+        constructor() {
+          // Load numbers from local storage
+          try {
+            const storeData = localStorage.getItem("enteredNumbers");
+            this.enteredNumbers = storeData ? JSON.parse(storeData) : [];
+          } catch (e) {
+            this.enteredNumbers = [];
+          }
+          this.sum = this.enteredNumbers.reduce((a, c) => a + c, 0);
+        }
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+        addNumber(userInput) {
+          // Validate user input
+          if (
+            typeof userInput !== "number" ||
+            Number.isInteger(userInput) === false
+          ) {
+            throw new Error("Input must be an integer");
+          }
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+          // Update local storage
+          this.enteredNumbers.push(userInput);
+          this.sum += userInput;
+          localStorage.setItem(
+            "enteredNumbers",
+            JSON.stringify(this.enteredNumbers)
+          );
+        }
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+        clear() {
+          this.enteredNumbers = [];
+          this.sum = 0;
+          localStorage.removeItem("enteredNumbers");
+        }
+      }
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
+      const numberInput = document.getElementById("numberInput");
+      const addButton = document.getElementById("addButton");
+      const clearButton = document.getElementById("clearButton");
+      const numberList = document.getElementById("numberList");
+      const totalSum = document.getElementById("totalSum");
+
+      // Initialize storage and restore values on load
+      const localStorageStore = new LocalStorage();
+
+      function updateDisplay() {
+        if (localStorageStore.enteredNumbers.length === 0) {
+          numberList.textContent = "No numbers yet";
+          totalSum.textContent = "0";
+        } else {
+          numberList.textContent = localStorageStore.enteredNumbers.join(" + ");
+          totalSum.textContent = localStorageStore.sum;
+        }
+      }
+
+      // Initial display update
+      updateDisplay();
+
+      // Add number event
+      addButton.addEventListener("click", function () {
+        const number = numberInput.value.trim();
+
+        // Check if input is a valid integer (no decimals, no empty input)
+        if (!/^-?\d+$/.test(number)) {
+          alert("Please enter a valid integer.");
+          return;
+        }
+
+        try {
+          const numValue = parseInt(number, 10);
+          localStorageStore.addNumber(numValue);
+          updateDisplay();
+          numberInput.value = "";
+          numberInput.focus();
+        } catch (e) {
+          alert(e.message);
+          return;
+        }
+      });
+
+      // Clear all numbers event
+      clearButton.addEventListener("click", function () {
+        if (confirm("Are you sure you want to clear all numbers?")) {
+          localStorageStore.clear();
+          updateDisplay();
+          numberInput.focus();
+        }
+      });
+
+      // Allow Enter key to add number
+      numberInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          addButton.click();
+        }
+      });
+
+      // Focus input on load
+      numberInput.focus();
     </script>
-</body>
+  </body>
 </html>
