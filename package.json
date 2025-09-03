@@ -1,0 +1,12 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "Assignment 2: Persisted Addition with Unit Tests",
+  "main": "number-manager.js",
+  "scripts": {
+    "test": "node number-manager.test.js",
+    "start": "echo 'Open persisted-addition.html in your browser'"
+  },
+  "keywords": ["javascript", "testing", "persistence", "localStorage"],
+  "author": "Heishigan"
+}
