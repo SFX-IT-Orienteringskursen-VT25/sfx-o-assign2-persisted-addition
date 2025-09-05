@@ -27,9 +27,18 @@
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
-        let enteredNumbers = [];
-        let sum = 0;
-    
+        //let enteredNumbers = [];
+        function NumbersandSummary(newNumber) {
+        let enteredNumbers = JSON.parse(localStorage.getItem('numbers')) || [];
+        if (newNumber !== undefined) {
+        enteredNumbers.push(newNumber);
+        }
+        const sum = enteredNumbers.reduce((acc,curr)=> acc + curr, 0);
+        localStorage.setItem('numbers', JSON.stringify(enteredNumbers));
+        //let sum = 0;
+        numberList.textContent = enteredNumbers.join(' + ');
+        totalSum.textContent = sum;
+        }
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -40,15 +49,36 @@
             }
 
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
+            NumbersandSummary(numValue);
+            //sum += numValue;
+            // localStorage.setItem('numbers', JSON.stringify(enteredNumbers));
+            // // numberList.textContent = enteredNumbers.join(' + ');
+            // // totalSum.textContent = sum;
+            // updateDisplay()
             numberInput.value = '';
             numberInput.focus();
         });
+        console.log("--- Starting Your Unit Tests ---");
+        NumbersAndSummary(5);
+        const numbers1 = JSON.parse(localStorage.getItem('numbers'));
+        const sum1 = numbers1.reduce((acc,curr) => acc + curr, 0);
+        if (numbers1.length === 1 && numbers1[0] === 5 && sum1 === 5) {
+            console.log("Test is passed");
+        } else {
+            console.log ('Test is failed');
+        }
+
+        updateNumbersAndSummary(-10);
+        const numbers2 = JSON.parse(localStorage.getItem('numbers'));
+        const sum2 = numbers2.reduce((acc,curr) => acc + curr, 0);
+        if (numbers2.length === 2 && numbers2[1] === -10 && sum2 === -5) {
+            console.log("Test is passed");
+        } else {
+            console.log ('Test is failed');
+        }
     </script>
+    
 </body>
 </html>
+
+
