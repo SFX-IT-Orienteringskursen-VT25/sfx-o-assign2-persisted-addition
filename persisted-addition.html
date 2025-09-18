@@ -23,37 +23,18 @@
     </div>
 </div>
 
+<!-- Link sum.js -->
+<script src="sum.js"></script>
+
 <script>
   const numberInput = document.getElementById('numberInput');
   const addButton = document.getElementById('addButton');
-  const numberList = document.getElementById('numberList');
-  const totalSum = document.getElementById('totalSum');
+  //const numberList = document.getElementById('numberList');
+  //const totalSum = document.getElementById('totalSum');
 
   // let enteredNumbers = [];
   // let sum = 0;
 
-  function updateNumbers(newNumber){
-    // Read existing numbers from localStorage
-    let stored = JSON.parse(localStorage.getItem('numbers')) || [];
-
-    //Add new number if provided
-    if(newNumber !=null) {
-      stored.push(newNumber);
-      localStorage.setItem('numbers', JSON.stringify(stored));
-    }
-
-    //Calculate sum
-    const sum = stored.reduce((acc,n) => acc + n, 0 );
-
-    // Format numbers for display: negatives get parentheses
-    const formatted = stored.map(n => (n < 0 ? `(${n})` : n));
-
-    numberList.textContent = formatted.join(' + ');
-    totalSum.textContent = sum;
-
-    return {stored , sum } //for unit testing
-
-  }
 
   addButton.addEventListener('click', function () {
     const number = numberInput.value.trim();
@@ -80,5 +61,6 @@
     updateNumbers(); // populate UI from persisted values
   });
 </script>
+
 </body>
 </html>
