@@ -28,7 +28,6 @@
         const totalSum = document.getElementById('totalSum');
     
         let enteredNumbers = [];
-        let sum = 0;
     
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
@@ -41,14 +40,39 @@
 
             const numValue = parseInt(number, 10);
             enteredNumbers.push(numValue);
-            sum += numValue;
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            const summarize = handleCalculation(enteredNumbers);
+
+            numberList.textContent = summarize.numbers.join(' + ');
+            totalSum.textContent = summarize.sum;
 
             numberInput.value = '';
             numberInput.focus();
         });
+
+        function handleCalculation(enteredNumbers) {             
+            // Save the enteredNumbers to localStorage             
+            localStorage.setItem('calculatorNumbers', JSON.stringify(enteredNumbers));
+
+            // Read from localStorage            
+            let persistedNumbers = []; 
+
+            const stored = localStorage.getItem('calculatorNumbers');  
+
+            if (stored) {                
+                persistedNumbers = JSON.parse(stored);             
+            } else {                  
+                persistedNumbers = enteredNumbers;             
+            } 
+
+            // Addition             
+            const sum = persistedNumbers.reduce((total, num) => total + num, 0);    
+
+            return {                 
+                numbers: persistedNumbers,                 
+                sum: sum             
+            };         
+        }
     </script>
 </body>
 </html>
