@@ -27,25 +27,38 @@
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+        // Load persisted numbers from localStorage
+        let enteredNumbers = JSON.parse(localStorage.getItem('numbers')) || [];
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
+        // Update the display with current numbers and sum
+        function updateDisplay() {
+            numberList.textContent = enteredNumbers.join(' + ');
+            const sum = enteredNumbers.reduce((acc, n) => acc + n, 0);
+            totalSum.textContent = sum;
+        }
+
+        // Run once on page load
+        updateDisplay();
+
+        // Function to add number, persist it, and return sum
+        function addNumber(num) {
+            if (!Number.isInteger(num)) {
                 alert('Please enter a valid integer.');
                 return;
             }
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+            enteredNumbers.push(num);
+            localStorage.setItem('numbers', JSON.stringify(enteredNumbers));
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            const sum = enteredNumbers.reduce((acc, n) => acc + n, 0);
+            updateDisplay();
+            return sum;
+        }
 
+        // Event listener for the add button
+        addButton.addEventListener('click', function () {
+            const num = parseInt(numberInput.value.trim(), 10);
+            addNumber(num);
             numberInput.value = '';
             numberInput.focus();
         });
