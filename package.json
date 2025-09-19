@@ -1,0 +1,16 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "Clone this repository\r Create a branch",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.1.3"
+  }
+}

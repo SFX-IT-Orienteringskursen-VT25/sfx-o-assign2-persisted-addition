@@ -65,3 +65,6 @@ pact/logs/MyConsumer-MyProvider-mockserver-interaction.log
 # NX
 .nx/cache
 .nx/workspace-data
+
+node_modules
+#data/*.json
