@@ -1,0 +1,27 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "Clone this repository Create a branch",
+  "main": "persist.js",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition/issues"
+  },
+  "homepage": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition#readme",
+  "devDependencies": {
+    "jsdom": "^27.0.0",
+    "vite": "^6.3.6",
+    "vitest": "^3.2.4"
+  }
+}
