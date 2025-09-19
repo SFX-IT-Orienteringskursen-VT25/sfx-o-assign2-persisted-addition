@@ -1,0 +1,23 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "Clone this repository Create a branch",
+  "main": "numberService.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition/issues"
+  },
+  "homepage": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition#readme",
+  "devDependencies": {
+    "jest": "^30.1.3"
+  }
+}
