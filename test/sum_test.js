@@ -20,3 +20,18 @@ test('ignores non-integers', () => {
   assert.deepEqual(numbers, [1]);
   assert.equal(sum, 1);
 }); 
+
+test('NumbersAndSummary persists and summarizes in one function', () => {
+    const numberList = document.getElementById('numberList');
+    const totalSum = document.getElementById('totalSum');
+
+    // Call the production function directly
+    window.NumbersAndSummary(5);
+    window.NumbersAndSummary(-10);
+
+    const stored = JSON.parse(window.localStorage.getItem('numbers'));
+    expect(stored).toEqual([5, -10]);
+
+    expect(numberList.textContent.trim()).toBe('5 + -10');
+    expect(totalSum.textContent).toBe('-5');
+}); 
