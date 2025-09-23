@@ -27,8 +27,18 @@
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
-        let enteredNumbers = [];
-        let sum = 0;
+        //let enteredNumbers = [];
+        function NumbersAndSummary(newNumber) {
+        let enteredNumbers = JSON.parse(localStorage.getItem('numbers')) || [];
+        if (newNumber !== undefined) {
+        enteredNumbers.push(newNumber);
+        }
+        const sum = enteredNumbers.reduce((acc,curr)=> acc + curr, 0);
+        localStorage.setItem('numbers', JSON.stringify(enteredNumbers));
+        //let sum = 0;
+        numberList.textContent = enteredNumbers.join(' + ');
+        totalSum.textContent = sum;
+        }
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -39,8 +49,8 @@
             }
 
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue)
-            sum += numValue;
+            NumbersAndSummary(numValue);
+            //sum += numValue;
             // localStorage.setItem('numbers', JSON.stringify(enteredNumbers));
             // // numberList.textContent = enteredNumbers.join(' + ');
             // // totalSum.textContent = sum;
@@ -48,9 +58,8 @@
             numberInput.value = '';
             numberInput.focus();
         });
+        
     </script>
     
 </body>
 </html>
-
-
