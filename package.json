@@ -1,0 +1,9 @@
+{
+  "name": "add-and-summarize-numbers",
+  "version": "1.0.0",
+  "description": "Simple number adder with proper test setup",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+} 
