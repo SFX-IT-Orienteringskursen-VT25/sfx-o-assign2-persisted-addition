@@ -1,0 +1,22 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "calculate and persist the history and result",
+  "main": "persisted-addition.html",
+  "type": "commonjs",
+  "scripts": {
+    "start": "live-server",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "babel-jest": "^30.1.2",
+    "jest": "^30.1.3",
+    "jest-localstorage-mock": "^2.4.26",
+    "live-server": "^1.2.2"
+  }
+}

@@ -22,8 +22,10 @@
         </div>
     </div>
 
-    <script src="persited-addition-tests.js"></script>
-    <script>
+    <script type="module">
+        import { handleCalculation } from './calculator.js';
+
+
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const clearButton = document.getElementById('clearButton');
@@ -38,13 +40,6 @@
             
             //update the Displayed number list and result
             updateDisplay();
-
-            //Run tests 
-            if (typeof persitedAdditionTests === 'function') {
-                persitedAdditionTests();
-            } else {
-                alert('Tests not available. Make sure calculator-tests.js is loaded.');
-            }
             
         });
 
@@ -53,7 +48,7 @@
             
             if (stored) {
                 try {
-                    console.log('Sotred', stored);
+                    console.log('Stored', stored);
                     enteredNumbers = JSON.parse(stored);
                 } catch (error) {
                     console.error('Error loading persisted numbers:', error);
@@ -101,30 +96,6 @@
             localStorage.removeItem('calculatorNumbers');
             updateDisplay();
         });
-
-        function handleCalculation(enteredNumbers) {             
-            // Save the enteredNumbers to localStorage             
-            localStorage.setItem('calculatorNumbers', JSON.stringify(enteredNumbers));
-
-            // Read from localStorage            
-            let persistedNumbers = []; 
-
-            const stored = localStorage.getItem('calculatorNumbers');  
-
-            if (stored) {                
-                persistedNumbers = JSON.parse(stored);             
-            } else {                  
-                persistedNumbers = enteredNumbers;             
-            } 
-
-            // Addition             
-            const sum = persistedNumbers.reduce((total, num) => total + num, 0);    
-
-            return {                 
-                numbers: persistedNumbers,                 
-                sum: sum             
-            };         
-        }
         
     </script>
 </body>
