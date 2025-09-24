@@ -20,35 +20,43 @@
             <h3><span id="totalSum">0</span></h3>
         </div>
     </div>
+<script type="module">
+  import { NumberService } from './numberService.js';
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+  const numberInput = document.getElementById('numberInput');
+  const addButton = document.getElementById('addButton');
+  const numberList = document.getElementById('numberList');
+  const totalSum = document.getElementById('totalSum');
+  const resetButton = document.getElementById('resetButton');
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+  const service = new NumberService();
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+  function render() {
+    const numbers = service.loadNumbers();
+    numberList.textContent = numbers.join(' + ');
+    totalSum.textContent = numbers.reduce((a, b) => a + b, 0);
+  }
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+  addButton.addEventListener('click', () => {
+    const value = numberInput.value.trim();
+    if (!/^-?\d+$/.test(value)) {
+      alert('Please enter a valid integer.');
+      return;
+    }
+    service.updateNumbers(parseInt(value, 10));
+    numberInput.value = '';
+    render();
+  });
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
-    </script>
+  resetButton.addEventListener('click', () => {
+    service.reset();
+    render();
+  });
+
+  // Initial render
+  render();
+</script>
+
+
 </body>
 </html>
