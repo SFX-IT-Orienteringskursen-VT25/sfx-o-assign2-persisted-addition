@@ -1,4 +1,4 @@
-# sfx-o-assign2-persisted-addition
+# sfx-o-assign2-persisted-addition.
 The assignment was introduced in Class #5. In the link you can find the slides from the presentation as well as a recording of the class.
 https://classroom.google.com/c/MjI5OTg3MzMwODFa/p/MjMyMjEzNTkwMjFa/details
 
