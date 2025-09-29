@@ -1,9 +1,13 @@
 {
-  "name": "add-and-summarize-numbers",
+  "name": "untitled-folder-2",
   "version": "1.0.0",
-  "description": "Simple number adder with proper test setup",
-  "type": "module",
+  "private": true,
   "scripts": {
-    "test": "node --test"
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdom": "^24.0.0",
+    "jest-environment-jsdom": "^29.7.0"
   }
 } 
