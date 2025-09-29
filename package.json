@@ -1,0 +1,9 @@
+{
+  "name": "persisted-numbers-test",
+  "version": "1.0.0",
+  "description": "Persisted numbers addition and summary with tests",
+  "main": "persistedNumbers.js",
+  "scripts": {
+    "test": "node persistedNumbers.test.js"
+  }
+}

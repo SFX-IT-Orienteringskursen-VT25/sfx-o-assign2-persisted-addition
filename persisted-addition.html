@@ -21,34 +21,32 @@
         </div>
     </div>
 
+    <script src="persistedNumbers.js"></script>
     <script>
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
+
+        function updateUserInterface() {
+            const { numbers, sum } = persistedNumbersAddition();
+            numberList.textContent = numbers.join(' + ');
+            totalSum.textContent = sum;
+        }
+
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
-
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
+            if (!/^-?\d+$/.test(number)) {
                 alert('Please enter a valid integer.');
                 return;
             }
-
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
+            persistedNumbersAddition(numValue);
+            updateUserInterface();
             numberInput.value = '';
             numberInput.focus();
         });
+        updateUserInterface();
     </script>
 </body>
 </html>
