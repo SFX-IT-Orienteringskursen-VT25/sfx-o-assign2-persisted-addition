@@ -20,9 +20,10 @@
             <h3><span id="totalSum">0</span></h3>
         </div>
     </div>
-
+<script src="LocalStorage.js"></script>
     <script>
-        const numberInput = document.getElementById('numberInput');
+       
+       const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
@@ -32,20 +33,10 @@
     
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
-
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
-
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
+             const sum =AdditionandPersistNumber(number);
+             
+             totalSum.textContent =sum ;
+        
             numberInput.value = '';
             numberInput.focus();
         });
