@@ -26,9 +26,26 @@
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
+    // changing to local storage 
+let enteredNumbers = JSON.parse(localStorage.getItem('enteredNumbers')) || [];
         let sum = 0;
+ //function to handle persisted numbers
+        function handlePersistedNumbers(newNumber) {
+            enteredNumbers.push(newNumber);
+            localStorage.setItem('enteredNumbers',JSON.stringify(enteredNumbers));
+            const total = enteredNumbers.reduce((a,b)=>a+b, 0);
+        
+        return{
+            numbers: [...enteredNumbers],
+            total: total
+        };
+    }
+//Funtion to update the screen
+function updateUI() {
+    const total =enteredNumbers.reduce((a,b)=>a+b, 0);
+    numberList.textContent =enteredNumbers.join('+');
+    totalSum.textContent =total;
+}
     
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
@@ -40,15 +57,46 @@
             }
 
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+            //enteredNumbers.push(numValue);
+            //sum += numValue;
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
-
+            //numberList.textContent = enteredNumbers.join(' + ');
+            //totalSum.textContent = sum;
+// replcing code above with the function that saves and calculates the sum
+            handlePersistedNumbers(numValue);
+           updateUI(); //to update the screen
             numberInput.value = '';
             numberInput.focus();
         });
+        //unit testing, not visible to user
+
+function runMiniTests() {
+    console.log("=== Running Mini Tests for handlePersistedNumbers ===");
+
+    // Reset numbers before testing
+    enteredNumbers = [];
+    localStorage.removeItem('enteredNumbers');
+
+    // Define test numbers
+    const testNumber1 = 5;
+    const testNumber2 = 10;
+    const testNumber3 = 2;
+
+    // tests using variables
+    console.log("Test 1 - Add", testNumber1, ":", handlePersistedNumbers(testNumber1));
+    console.log("Test 2 - Add", testNumber2, ":", handlePersistedNumbers(testNumber2));
+    console.log("Test 3 - Add", testNumber3, ":", handlePersistedNumbers(testNumber3));
+
+    // Checking that numbers are stored in localStorage
+    let stored = JSON.parse(localStorage.getItem('enteredNumbers'));
+    console.log("Stored in localStorage:", stored);
+
+    console.log("=== Mini Tests Completed ===");
+
+    // Update the UI to reflect the test numbers
+    updateUI();
+}
     </script>
+
 </body>
 </html>
