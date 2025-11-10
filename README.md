@@ -24,3 +24,16 @@ Commit
 Push your branch
 Create a pull request <your branch> => <main>
 Done!
+
+## Setting project  🔧
+** This project has an external library to test functionalities.
+
+#### Run this commmand in your terminal to install all dependencies. 🙈
+```bash
+    npm i
+```
+
+#### Run test file 👁️‍🗨️
+```bash
+    npm test
+```
