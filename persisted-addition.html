@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add and Summarize Numbers</title>
+    <script src="./index.js"></script>
 </head>
 <body>
     <div class="container">
@@ -17,7 +18,12 @@
         <div class="list">
             <div id="numberList"></div>
             =
-            <h3><span id="totalSum">0</span></h3>
+            <h3><small>New sum:</small> <span id="totalSum">0</span></h3>
+            <h3><small>Last sum:</small>
+                <span id="numberStorage">0</span>=
+                <span id="totalSumStorage">0</span>
+                <button id="cleanStorage">Clean old sum</button>
+            </h3>
         </div>
     </div>
 
@@ -26,6 +32,8 @@
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
+        const numberStorage = document.getElementById('numberStorage');
+        const totalSumStorage = document.getElementById('totalSumStorage');
     
         let enteredNumbers = [];
         let sum = 0;
@@ -39,16 +47,33 @@
                 return;
             }
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+            enteredNumbers.push(parseInteger(number));
+            sum += sumElements(number);
 
             numberList.textContent = enteredNumbers.join(' + ');
             totalSum.textContent = sum;
 
+            saveValue(numberList.textContent);
+            saveValue(totalSum.textContent);
+
             numberInput.value = '';
             numberInput.focus();
         });
+
+        window.onload = (event) => {
+            const savedValues = getValue("numbers");
+            const savedSum = getValue("sum");
+
+            numberStorage.textContent = savedValues
+            totalSumStorage.textContent = savedSum
+        };
+
+        cleanStorage.addEventListener("click", () => {
+            numberStorage.textContent = ""
+            totalSumStorage.textContent = "0"
+            localStorage.clear();
+        })
+
     </script>
 </body>
 </html>
