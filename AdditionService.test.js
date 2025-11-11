@@ -17,4 +17,20 @@ describe('AdditionService', () => {
     expect(result2.sum).toBe(15);
     expect(result2.enteredNumbers).toEqual([5, 10]);
   });
+
+  it('should handle negative numbers', () => {
+  additionService.summarize(-5);
+  const state = additionService.summarize(-10);
+  expect(state.sum).toBe(-15);
+  expect(state.enteredNumbers).toEqual([-5, -10]);
+});
+
+it('should not add undefined to the list', () => {
+  additionService.summarize();
+  const state = additionService.summarize();
+  expect(state.sum).toBe(0);
+  expect(state.enteredNumbers).toEqual([]);
+});
+
+
 });
