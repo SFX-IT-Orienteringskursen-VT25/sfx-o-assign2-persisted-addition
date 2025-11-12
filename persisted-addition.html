@@ -21,15 +21,20 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
-        let enteredNumbers = [];
-        let sum = 0;
-    
+        import { AdditionService } from './AdditionService.js';
+        const additionService = new AdditionService();
+
+        let {enteredNumbers, sum} = additionService.getState();
+        numberList.textContent = enteredNumbers.length ? enteredNumbers.join(' + ') : '';
+        totalSum.textContent = sum;
+
+
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -39,11 +44,9 @@
                 return;
             }
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
+            const numValue = parseInt(number, 10);        
+            ({enteredNumbers, sum} = additionService.summarize(numValue));
+            numberList.textContent = enteredNumbers.length ? enteredNumbers.join(' + ') : '';
             totalSum.textContent = sum;
 
             numberInput.value = '';
