@@ -1,11 +1,28 @@
 import { AdditionService } from './AdditionService.js';
 
 describe('AdditionService', () => {
+  let mockStorage;
   let additionService;
 
   beforeEach(() => {
-    localStorage.clear();
-    additionService = new AdditionService();
+    // Each test gets a clean, independent fake storage
+    mockStorage = {
+      store: {},
+      getItem(key) {
+        return this.store[key] || null;
+      },
+      setItem(key, value) {
+        this.store[key] = value.toString();
+      },
+      removeItem(key) {
+        delete this.store[key];
+      },
+      clear() {
+        this.store = {};
+      }
+    };
+
+    additionService = new AdditionService(mockStorage);
   });
 
   it('should add the numbers correctly', () => {

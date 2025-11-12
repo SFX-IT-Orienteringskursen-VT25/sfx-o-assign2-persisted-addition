@@ -1,9 +1,13 @@
 export class AdditionService {
   
+  constructor(storage = localStorage) {
+    this.storage = storage;
+  }
+
   getState() {
   return {
-    enteredNumbers: JSON.parse(localStorage.getItem("enteredNumbersArray") || "[]"),
-    sum: parseInt(localStorage.getItem("totalSum") || "0", 10)
+    enteredNumbers: JSON.parse(this.storage.getItem("enteredNumbersArray") || "[]"),
+    sum: parseInt(this.storage.getItem("totalSum") || "0", 10)
   };
   }
 
@@ -11,10 +15,10 @@ export class AdditionService {
   
   
   summarize(numValue) {
-    const stored = localStorage.getItem("enteredNumbersArray");
+    const stored = this.storage.getItem("enteredNumbersArray");
     const enteredNumbers = stored ? JSON.parse(stored) : [];
 
-    const totalSum = localStorage.getItem("totalSum");
+    const totalSum = this.storage.getItem("totalSum");
     const parsed = totalSum ? parseInt(totalSum, 10) : 0;
     let sum = Number.isFinite(parsed) ? parsed : 0;
 
@@ -22,8 +26,8 @@ export class AdditionService {
     if (numValue !== undefined) {
       enteredNumbers.push(numValue);
       sum += numValue;
-      localStorage.setItem("enteredNumbersArray", JSON.stringify(enteredNumbers));
-      localStorage.setItem("totalSum", sum.toString());
+      this.storage.setItem("enteredNumbersArray", JSON.stringify(enteredNumbers));
+      this.storage.setItem("totalSum", sum.toString());
     }
 
     return { enteredNumbers, sum };
