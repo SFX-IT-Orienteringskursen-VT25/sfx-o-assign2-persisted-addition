@@ -13,6 +13,7 @@
         
         <input type="text" id="numberInput" placeholder="Enter an integer">
         <button id="addButton">Add Number</button>
+        <button id="clearMemory"onclick="localStorage.removeItem('persistedAddition.enteredNumbers'); location.reload();" >Clear Memory</button>
         
         <div class="list">
             <div id="numberList"></div>
@@ -22,6 +23,8 @@
     </div>
 
     <script>
+        const LS_KEY = 'persistedAddition.enteredNumbers';
+
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
@@ -29,7 +32,38 @@
     
         let enteredNumbers = [];
         let sum = 0;
-    
+
+        function updateUI() {
+            numberList.textContent = enteredNumbers.length ? enteredNumbers.join(' + ') : '';
+            totalSum.textContent = sum;
+        }
+
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(LS_KEY, JSON.stringify(enteredNumbers));
+            } catch (e) {
+                console.warn('Could not save to localStorage', e);
+            }
+        }
+
+        // Load persisted numbers on page load
+        (function loadFromLocalStorage() {
+            try {
+                const raw = localStorage.getItem(LS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) {
+                        // Ensure values are numbers
+                        enteredNumbers = parsed.map(n => Number(n)).filter(n => !Number.isNaN(n));
+                        sum = enteredNumbers.reduce((a, b) => a + b, 0);
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not read from localStorage', e);
+            }
+            updateUI();
+        })();
+
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -43,8 +77,8 @@
             enteredNumbers.push(numValue);
             sum += numValue;
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            updateUI();
+            saveToLocalStorage();
 
             numberInput.value = '';
             numberInput.focus();
