@@ -1,0 +1,30 @@
+{
+  "name": "oelmaghrapy-sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "playwright": "^1.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  },
+  "description": "The assignment was introduced in Class #5. In the link you can find the slides from the presentation as well as a recording of the class.\r https://classroom.google.com/c/MjI5OTg3MzMwODFa/p/MjMyMjEzNTkwMjFa/details",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition/issues"
+  },
+  "homepage": "https://github.com/SFX-IT-Orienteringskursen-VT25/sfx-o-assign2-persisted-addition#readme"
+}
