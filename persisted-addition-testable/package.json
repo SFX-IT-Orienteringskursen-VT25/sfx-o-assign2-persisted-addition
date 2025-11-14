@@ -1,0 +1,16 @@
+{
+  "name": "persisted-addition-testable",
+  "version": "1.0.0",
+  "description": "The assignment was introduced in Class #5. In the link you can find the slides from the presentation as well as a recording of the class. https://classroom.google.com/c/MjI5OTg3MzMwODFa/p/MjMyMjEzNTkwMjFa/details",
+  "main": "index.js",
+  "scripts": {
+  "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
+}

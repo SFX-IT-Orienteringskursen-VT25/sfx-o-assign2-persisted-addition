@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Number Summarizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        input, button { padding: 8px; margin-top: 10px; }
+        .list { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Add Numbers and See Total</h1>
+    <input type="text" id="numberInput" placeholder="Enter an integer">
+    <button id="addButton">Add Number</button>
+
+    <div class="list">
+        <div id="numberList"></div>
+        =
+        <h3><span id="totalSum">0</span></h3>
+    </div>
+
+    <script>
+        const numberInput = document.getElementById('numberInput');
+        const addButton = document.getElementById('addButton');
+        const numberList = document.getElementById('numberList');
+        const totalSum = document.getElementById('totalSum');
+
+        // --------- use function to facilitate unit test ---------
+        function validateNumber(input) {
+            return /^-?\d+$/.test(input);
+        }
+
+        function loadNumbers() {
+            const stored = localStorage.getItem('numbers');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveNumbers(numbersArray) {
+            localStorage.setItem('numbers', JSON.stringify(numbersArray));
+        }
+
+        function addNumber(numValue, numbersArray) {
+            numbersArray.push(numValue);
+            saveNumbers(numbersArray);
+            return numbersArray;
+        }
+
+        function summarizeNumbers(numbersArray) {
+            return numbersArray.reduce((acc, n) => acc + n, 0);
+        }
+
+        // --------- function realization ---------
+        let enteredNumbers = loadNumbers();
+        numberList.textContent = enteredNumbers.join(' + ');
+        totalSum.textContent = summarizeNumbers(enteredNumbers);
+
+        addButton.addEventListener('click', function() {
+            const number = numberInput.value.trim();
+            if (!validateNumber(number)) {
+                alert('Please enter a valid integer.');
+                return;
+            }
+
+            const numValue = parseInt(number, 10);
+            enteredNumbers = addNumber(numValue, enteredNumbers);
+
+            numberList.textContent = enteredNumbers.join(' + ');
+            totalSum.textContent = summarizeNumbers(enteredNumbers);
+
+            numberInput.value = '';
+            numberInput.focus();
+        });
+    </script>
+</body>
+</html>
