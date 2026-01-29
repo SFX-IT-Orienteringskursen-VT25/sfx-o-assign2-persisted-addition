@@ -13,6 +13,7 @@
         
         <input type="text" id="numberInput" placeholder="Enter an integer">
         <button id="addButton">Add Number</button>
+        <button id="resetButton">Reset Sum</button>
         
         <div class="list">
             <div id="numberList"></div>
@@ -24,12 +25,32 @@
     <script>
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
+        const resetButton = document.getElementById('resetButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
     
         let enteredNumbers = [];
         let sum = 0;
-    
+
+        //loading numbers from localStorage
+        const stored = localStorage.getItem('numbers');
+        if(stored)
+        {
+            enteredNumbers = JSON.parse(stored);
+            sum = enteredNumbers.reduce((a,b)=>a+b,0);
+            totalSum.textContent = sum;
+            numberList.textContent = '';
+        }
+        //function for sum&add number
+        function addNumber(num)
+        {
+            enteredNumbers.push(num);
+            sum = enteredNumbers.reduce((a,b)=>a+b,0);
+            localStorage.setItem('numbers',JSON.stringify(enteredNumbers));
+            numberList.textContent = enteredNumbers.join(' + ');
+            totalSum.textContent = sum;
+        }
+
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -39,12 +60,16 @@
                 return;
             }
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+        resetButton.addEventListener('click',function(){
+            enteredNumbers=[];
+            sum = 0;
+            localStorage.removeItem('numbers');
 
-            numberList.textContent = enteredNumbers.join(' + ');
+            numberList.textContent='';
             totalSum.textContent = sum;
+        });
+
+            addNumber(parseInt(number,10));
 
             numberInput.value = '';
             numberInput.focus();
