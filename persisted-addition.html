@@ -29,7 +29,18 @@
     
         let enteredNumbers = [];
         let sum = 0;
-    
+
+        window.onload = function() {
+            const savedList = JSON.parse(localStorage.getItem('numberList')) || [];
+            const savedSum = parseInt(localStorage.getItem('totalSum')) || 0;
+
+            enteredNumbers = savedList;
+            sum = savedSum;
+
+            numberList.textContent = enteredNumbers.join(' + ');
+            totalSum.textContent = sum;
+        };
+
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -48,6 +59,10 @@
 
             numberInput.value = '';
             numberInput.focus();
+
+            localStorage.setItem('numberList', JSON.stringify(enteredNumbers));
+            localStorage.setItem('totalSum', sum);
+
         });
     </script>
 </body>
