@@ -1,0 +1,19 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "The assignment was introduced in Class #5. In the link you can find the slides from the presentation as well as a recording of the class.\r https://classroom.google.com/c/MjI5OTg3MzMwODFa/p/MjMyMjEzNTkwMjFa/details",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+
+  
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+  
+}
