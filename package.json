@@ -1,0 +1,27 @@
+{
+  "name": "sfx-o-assign2-persisted-addition",
+  "version": "1.0.0",
+  "description": "The assignment was introduced in Class #5. In the link you can find the slides from the presentation as well as a recording of the class. https://classroom.google.com/c/MjI5OTg3MzMwODFa/p/MjMyMjEzNTkwMjFa/details",
+  "main": "numberService.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TinjuJoseph26/sfx-o-assign2-persisted-addition.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TinjuJoseph26/sfx-o-assign2-persisted-addition/issues"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
+  },
+  "homepage": "https://github.com/TinjuJoseph26/sfx-o-assign2-persisted-addition#readme"
+}
