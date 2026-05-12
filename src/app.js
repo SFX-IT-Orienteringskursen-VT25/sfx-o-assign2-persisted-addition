@@ -9,14 +9,13 @@ const numberList  = document.getElementById('numberList');
 const totalSum    = document.getElementById('totalSum');
 
 // Render current summary on first load (no new numbers to add)
-//render(updateAndSummarize(window.localStorage, STORAGE_KEY,[]));
+render(updateAndSummarize(window.localStorage, STORAGE_KEY,[]));
 
 window.addEventListener('DOMContentLoaded', () => {
   localStorage.removeItem(STORAGE_KEY);
 });
 
-console.log(updateAndSummarize(window.localStorage, STORAGE_KEY,[]));
-//console.log('Hello');
+
 addButton.addEventListener('click', () => {
   const raw = (numberInput.value || '').trim();
 
