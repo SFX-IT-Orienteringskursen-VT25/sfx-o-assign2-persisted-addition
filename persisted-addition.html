@@ -24,25 +24,14 @@
       </div>
     </div>
 
-    <script>
+    <script type="module">
+      import { NumberService } from "./numberService.js";
       const numberInput = document.getElementById("numberInput");
       const addButton = document.getElementById("addButton");
       const numberList = document.getElementById("numberList");
       const totalSum = document.getElementById("totalSum");
 
-      // NumberService implementation (same as numberService.js)
-      const numberService = {
-        STORAGE_KEY: "enteredNumbers",
-        loadAndSummarizeNumbers() {
-          const storedData = localStorage.getItem(this.STORAGE_KEY);
-          const numbers = storedData ? JSON.parse(storedData) : [];
-          const sum = numbers.reduce((acc, num) => acc + num, 0);
-          return { numbers, sum };
-        },
-        persistNumbers(numbers) {
-          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(numbers));
-        },
-      };
+      const numberService = new NumberService();
 
       // Function to update the display
       function updateDisplay(numbers, sum) {
