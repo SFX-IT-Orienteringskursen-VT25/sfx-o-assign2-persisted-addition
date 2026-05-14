@@ -1,21 +1,42 @@
 const { addNumberLogic } = require('./add.js');
 
+describe('addNumberLogic Persistence Tests', () => {
+    let mockStorage;
 
-test('adds valid integers correctly', () => {
-    let numbers = [];
-    let sum = 0;
+    beforeEach(() => {
+        let store = {};
+        mockStorage = {
+            getItem: (key) => store[key] || null,
+            setItem: (key, value) => { store[key] = value.toString(); },
+            clear: () => { store = {}; }
+        };
+    });
 
-    const result = addNumberLogic("5", numbers, sum);
+    test('should persist multiple numbers and return cumulative sum', () => {
+       
+        addNumberLogic(mockStorage, "10");
+  
+        const result = addNumberLogic(mockStorage, "20");
 
-    expect(result.numbers).toEqual([5]);
-    expect(result.sum).toBe(5);
-});
+      
+        expect(result.numbers).toEqual([10, 20]);
+   
+        expect(result.sum).toBe(30);
+   
+        expect(mockStorage.getItem('persisted_numbers')).toBe(JSON.stringify([10, 20]));
+    });
 
-test('rejects invalid input', () => {
-    let numbers = [];
-    let sum = 0;
+    test('should return error for non-integer input', () => {
+        const result = addNumberLogic(mockStorage, "hello");
+        expect(result.error).toBe('invalid');
+    });
 
-    const result = addNumberLogic("abc", numbers, sum);
+    test('should retrieve existing data on initialization', () => {
 
-    expect(result.error).toBe('invalid');
+        mockStorage.setItem('persisted_numbers', JSON.stringify([5, 5]));
+        
+        const result = addNumberLogic(mockStorage, "");
+        expect(result.numbers).toEqual([5, 5]);
+        expect(result.sum).toBe(10);
+    });
 });
