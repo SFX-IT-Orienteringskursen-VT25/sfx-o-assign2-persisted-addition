@@ -21,15 +21,22 @@
         </div>
     </div>
 
+    <script src="numberService.js"></script>
     <script>
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
+
+        function render(numbers, sum) {
+            numberList.textContent = numbers.join(' + ');
+            totalSum.textContent = sum;
+        }
+
+        // Load whatever was persisted from a previous visit and show it.
+        const initialSummary = getSummary(localStorage);
+        render(initialSummary.numbers, initialSummary.sum);
+
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
 
@@ -40,11 +47,9 @@
             }
 
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+            const result = addNumberAndSummarize(numValue, localStorage);
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            render(result.numbers, result.sum);
 
             numberInput.value = '';
             numberInput.focus();
