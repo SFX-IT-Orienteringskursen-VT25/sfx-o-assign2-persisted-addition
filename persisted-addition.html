@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="numberStorage.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,33 +23,40 @@
     </div>
 
     <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+      const numberInput = document.getElementById('numberInput');
+      const addButton = document.getElementById('addButton');
+      const numberList = document.getElementById('numberList');
+      const totalSum = document.getElementById('totalSum');
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+      const numberStorage = new NumberStorage();
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+      function updateDisplay() {
+          const summary = numberStorage.getSummary();
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+          numberList.textContent = summary.numbers.join(' + ');
+          totalSum.textContent = summary.total;
+      }
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
-    </script>
+      updateDisplay();
+
+      addButton.addEventListener('click', function () {
+          const input = numberInput.value.trim();
+
+          if (!/^-?\d+$/.test(input)) {
+              alert('Please enter a valid integer.');
+              return;
+          }
+
+          const number = Number(input);
+
+          numberStorage.add(number);
+
+          updateDisplay();
+
+          numberInput.value = '';
+          numberInput.focus();
+      });
+  </script>
+
 </body>
 </html>
