@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add and Summarize Numbers</title>
+    <script src="addition.js"></script>
 </head>
 <body>
     <div class="container">
@@ -20,35 +21,39 @@
             <h3><span id="totalSum">0</span></h3>
         </div>
     </div>
+<script>
+const numberInput = document.getElementById('numberInput');
+const addButton = document.getElementById('addButton');
+const numberList = document.getElementById('numberList');
+const totalSum = document.getElementById('totalSum');
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+function render(numbers, sum) {
+numberList.textContent = numbers.join(' + ');
+totalSum.textContent = sum;
+}
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+window.addEventListener('DOMContentLoaded', function () {
+const saved = getStoredNumbers();
+const sum = saved.reduce((total, n) => total + n, 0);
+render(saved, sum);
+});
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+addButton.addEventListener('click', function () {
+const number = numberInput.value.trim();
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+if (!/^-?\d+$/.test(number)) {
+alert('Please enter a valid integer.');
+return;
+}
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
-    </script>
+const numValue = parseInt(number, 10);
+const { numbers, sum } = addNumberAndPersist(numValue);
+
+render(numbers, sum);
+
+numberInput.value = '';
+numberInput.focus();
+});
+</script>
 </body>
 </html>
