@@ -21,34 +21,42 @@
         </div>
     </div>
 
-    <script>
-        const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+ <script src="numberService.js"></script>
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+<script>
+    const numberInput = document.getElementById('numberInput');
+    const addButton = document.getElementById('addButton');
+    const numberList = document.getElementById('numberList');
+    const totalSum = document.getElementById('totalSum');
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+    let enteredNumbers =
+        JSON.parse(localStorage.getItem('enteredNumbers')) || [];
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+    function updateDisplay() {
+        const result = handleNumbers(enteredNumbers);
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
-    </script>
+        numberList.textContent = result.numbers.join(' + ');
+        totalSum.textContent = result.sum;
+    }
+
+    updateDisplay();
+
+    addButton.addEventListener('click', function () {
+        const number = numberInput.value.trim();
+
+        if (!/^-?\d+$/.test(number)) {
+            alert('Please enter a valid integer.');
+            return;
+        }
+
+        const numValue = parseInt(number, 10);
+        enteredNumbers.push(numValue);
+
+        updateDisplay();
+
+        numberInput.value = '';
+        numberInput.focus();
+    });
+</script>
 </body>
 </html>
