@@ -26,9 +26,34 @@
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
+
+        // --- CORE LOGIC (Unified function for read/write + summarizing) ---
+        function manageNumbersAndSummarize(action, newNumber = null) {
+            // 1. READ from persistence layer
+            const stored = localStorage.getItem('persistedNumbers');
+            let numbers = stored ? JSON.parse(stored) : [];
+
+            // 2. WRITE (if a new number is being added)
+            if (action === 'ADD' && typeof newNumber === 'number' && !isNaN(newNumber)) {
+                numbers.push(newNumber);
+                localStorage.setItem('persistedNumbers', JSON.stringify(numbers));
+            }
+
+            // 3. SUMMARIZING LOGIC (Contained inside the same function)
+            const sum = numbers.reduce((total, current) => total + current, 0);
+
+            // Return both the updated array and the final summary
+            return { numbers, sum };
+        }
+
+        // Function to refresh the UI elements
+        function updateUI(data) {
+            numberList.textContent = data.numbers.length > 0 ? data.numbers.join(' + ') : '';
+            totalSum.textContent = data.sum;
+        }
+
+        // Initialize UI with previously persisted data on page load
+        updateUI(manageNumbersAndSummarize('GET'));
     
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
@@ -40,11 +65,12 @@
             }
 
             const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            
+            // Execute the single unified function
+            const updatedData = manageNumbersAndSummarize('ADD', numValue);
+            
+            // Update the display
+            updateUI(updatedData);
 
             numberInput.value = '';
             numberInput.focus();
@@ -52,3 +78,4 @@
     </script>
 </body>
 </html>
+
