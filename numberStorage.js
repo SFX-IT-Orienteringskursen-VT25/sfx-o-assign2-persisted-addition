@@ -1,4 +1,4 @@
-class NumberStorage {
+export class NumberStorage {
     constructor(storage = localStorage) {
         this.storage = storage;
         this.storageKey = 'calculatorNumbers';
@@ -52,4 +52,3 @@ class NumberStorage {
     }
 }
 
-module.exports = { NumberStorage };

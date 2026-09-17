@@ -1,4 +1,4 @@
-const { NumberStorage } = require('./numberStorage');
+import { NumberStorage } from './numberStorage.js';
 
 describe('NumberStorage', () => {
 
