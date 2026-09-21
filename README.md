@@ -24,3 +24,11 @@ Commit
 Push your branch
 Create a pull request <your branch> => <main>
 Done!
+
+## Running the tests
+The test setup (jest) is already in this repository. You do not need to set it up yourself.
+
+npm install
+npm test
+
+Name your test file something ending in ".test.js". Both import/export and require/module.exports work.
