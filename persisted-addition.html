@@ -22,33 +22,53 @@
     </div>
 
     <script>
+
         const numberInput = document.getElementById('numberInput');
-        const addButton = document.getElementById('addButton');
-        const numberList = document.getElementById('numberList');
-        const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
-    
-        addButton.addEventListener('click', function () {
-            const number = numberInput.value.trim();
+	const addButton = document.getElementById('addButton');
+	const numberList = document.getElementById('numberList');
+	const totalSum = document.getElementById('totalSum');
 
-            // Check if input is a valid integer (no decimals, no empty input)
-            if (!/^-?\d+$/.test(number)) { 
-                alert('Please enter a valid integer.');
-                return;
-            }
+function persistNumbers(numbers) {
+    localStorage.setItem('enteredNumbers', JSON.stringify(numbers));
 
-            const numValue = parseInt(number, 10);
-            enteredNumbers.push(numValue);
-            sum += numValue;
+    const savedNumbers = JSON.parse(localStorage.getItem('enteredNumbers')) || [];
 
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+    numberList.textContent = savedNumbers.join(' + ');
 
-            numberInput.value = '';
-            numberInput.focus();
-        });
+    const sum = savedNumbers.reduce((total, number) => total + number, 0);
+    totalSum.textContent = sum;
+
+    return sum;
+}
+
+addButton.addEventListener('click', function () {
+    const number = numberInput.value.trim();
+
+    // Check if input is a valid integer
+    if (!/^-?\d+$/.test(number)) {
+        alert('Please enter a valid integer.');
+        return;
+    }
+
+    const numValue = parseInt(number, 10);
+
+    const enteredNumbers =
+        JSON.parse(localStorage.getItem('enteredNumbers')) || [];
+
+    enteredNumbers.push(numValue);
+
+    persistNumbers(enteredNumbers);
+
+    numberInput.value = '';
+    numberInput.focus();
+});
+
+// Load persisted numbers when the page starts
+const savedNumbers =
+    JSON.parse(localStorage.getItem('enteredNumbers')) || [];
+
+persistNumbers(savedNumbers);
+
     </script>
 </body>
 </html>
