@@ -31,7 +31,8 @@
         let enteredNumbers = [];
         let sum = 0;
         window.onload = function() {
-            updateCalculator();
+            sum = updateCalculator();
+            renderCalculator(sum);
         };
     
         addButton.addEventListener('click', function () {
@@ -45,45 +46,45 @@
 
             const numValue = parseInt(number, 10);
             sum = updateCalculator(numValue);
-
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            renderCalculator(sum);
 
             numberInput.value = '';
             numberInput.focus();
         });
         resetButton.addEventListener('click', function () {
             localStorage.removeItem('savedEnteredNumbers');
-
+            
             enteredNumbers = [];
             sum = 0;
-
-            numberList.textContent = '';
-            totalSum.textContent = '0';
+            renderCalculator(sum);  
         });
         function updateCalculator(newNumber) {
             // 1. Handle reading/writing the persisted numbers
-            // If a new number was provided, add it to the array.
+            const savedEnteredNumbers = localStorage.getItem('savedEnteredNumbers');
+
+            if (savedEnteredNumbers) {
+                enteredNumbers = JSON.parse(savedEnteredNumbers);
+            }
+            // 2. If a new number was provided, is added to the array.
             if (newNumber !== undefined) {
                 enteredNumbers.push(newNumber);
                 localStorage.setItem('savedEnteredNumbers', JSON.stringify(enteredNumbers));
             }
-            
-            let sumOfNumbers = 0;
-            const savedEnteredNumbers = localStorage.getItem('savedEnteredNumbers');
-            if (savedEnteredNumbers) {
-                enteredNumbers = JSON.parse(savedEnteredNumbers);
-            }
 
-            // 2. Calculate the sum of the numbers
+            // 3. Calculate the sum of the numbers
+            let sumOfNumbers = 0;
             for (const num of enteredNumbers) {
                 sumOfNumbers += num;
-            }            
-            numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sumOfNumbers;
-
-            // 3. Return the calculated sum
+            }  
+            // 4. Return the calculated sum
             return sumOfNumbers;
+        }
+        function renderCalculator(sum) {
+            // 1. Render the list of numbers
+            numberList.textContent = enteredNumbers.join(' + ');
+
+            // 2. Render the total sum
+            totalSum.textContent = sum;
         }
     </script>
 </body>
