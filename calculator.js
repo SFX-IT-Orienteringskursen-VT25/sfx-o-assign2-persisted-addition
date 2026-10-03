@@ -1,13 +1,14 @@
-let enteredNumbers = [];
+
 export function updateCalculator(newNumber, storage = localStorage) {
             // 1. Handle reading/writing the persisted numbers
             const savedEnteredNumbers = storage.getItem('savedEnteredNumbers');
 
+            let enteredNumbers = [];
+
             if (savedEnteredNumbers) {
                 enteredNumbers = JSON.parse(savedEnteredNumbers);
-            } else {
-                enteredNumbers = [];
-            }
+            } 
+
             // 2. If a new number was provided, is added to the array.
             if (newNumber !== undefined) {
                 enteredNumbers.push(newNumber);
@@ -22,7 +23,4 @@ export function updateCalculator(newNumber, storage = localStorage) {
             // 4. Return the calculated sum
             return sumOfNumbers;
 }
-      // Allow Jest to import the function
-if (typeof module !== 'undefined') {
-    module.exports = { updateCalculator };
-}  
+

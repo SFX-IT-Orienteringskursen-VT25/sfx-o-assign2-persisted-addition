@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <script type="module>
+    <script type="module">
         import { updateCalculator } from './calculator.js';
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
@@ -29,7 +29,6 @@
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
         
-        let enteredNumbers = [];
         let sum = 0;
         window.onload = function() {
             sum = updateCalculator();
@@ -55,13 +54,14 @@
         resetButton.addEventListener('click', function () {
             localStorage.removeItem('savedEnteredNumbers');
             
-            enteredNumbers = [];
             sum = 0;
             renderCalculator(sum);  
         });
         function renderCalculator(sum) {
+            const savedNumbers = localStorage.getItem('savedEnteredNumbers');
+            const numbers = savedNumbers ? JSON.parse(savedNumbers) : [];
             // 1. Render the list of numbers
-            numberList.textContent = enteredNumbers.join(' + ');
+            numberList.textContent = numbers.join(' + ');
 
             // 2. Render the total sum
             totalSum.textContent = sum;

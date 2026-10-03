@@ -68,5 +68,73 @@ describe('Persisted Addition', () => {
             '[5,10]'
         );
     });
+    test('Adding 3 to [5, 10]', () => {
 
+        // Arrange
+        let savedData = '[5,10]';
+        // Arrange
+        const storage = {
+                getItem: jest.fn(() => savedData),
+                setItem: jest.fn((key, value) => {
+                savedData = value;
+            })
+        };
+
+        // Act
+        const result = updateCalculator(-3, storage);
+
+        // Assert
+        expect(result).toBe(12);
+
+        expect(storage.setItem).toHaveBeenCalledWith(
+            'savedEnteredNumbers',
+            '[5,10,-3]'
+        );
+    });
+    test('Adding 0 to [5, 10]', () => {
+
+        // Arrange
+        let savedData = '[5,10]';
+        // Arrange
+        const storage = {
+                getItem: jest.fn(() => savedData),
+                setItem: jest.fn((key, value) => {
+                savedData = value;
+            })
+        };
+
+        // Act
+        const result = updateCalculator(0, storage);
+
+        // Assert
+        expect(result).toBe(15);
+
+        expect(storage.setItem).toHaveBeenCalledWith(
+            'savedEnteredNumbers',
+            '[5,10,0]'
+        );
+    });
+    test('Restore [5, 10, 3] from storage', () => {
+
+        // Arrange
+        let savedData = '[5,10,3]';
+        // Arrange
+        const storage = {
+                getItem: jest.fn(() => savedData),
+                setItem: jest.fn((key, value) => {
+                savedData = value;
+            })
+        };
+
+        // Act
+        const result = updateCalculator(undefined, storage);
+
+        // Assert
+        expect(result).toBe(18);
+
+        expect(storage.getItem).toHaveBeenCalledWith(
+            'savedEnteredNumbers'
+        );
+        expect(storage.setItem).not.toHaveBeenCalledWith();
+    });
 });
