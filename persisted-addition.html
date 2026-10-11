@@ -22,13 +22,38 @@
     </div>
 
     <script>
+        // Pass a list to update what is saved. Call it with no list to retrieve what is saved.
+        // Only the list is stored. The sum is calculated from that list and is not saved.
+        function retrieveOrUpdateNumbers(numbers) {
+            if (numbers !== undefined) {
+                localStorage.setItem('enteredNumbers', JSON.stringify(numbers));
+            }
+
+            // Nothing saved yet means the user has not added a number.
+            let savedText = localStorage.getItem('enteredNumbers');
+            let enteredNumbers = [];
+            if (savedText) {
+                enteredNumbers = JSON.parse(savedText);
+            }
+
+            let sum = 0;
+            for (let i = 0; i < enteredNumbers.length; i++) {
+                sum = sum + enteredNumbers[i];
+            }
+
+            return { enteredNumbers: enteredNumbers, sum: sum };
+        }
+
         const numberInput = document.getElementById('numberInput');
         const addButton = document.getElementById('addButton');
         const numberList = document.getElementById('numberList');
         const totalSum = document.getElementById('totalSum');
-    
-        let enteredNumbers = [];
-        let sum = 0;
+
+        // Retrieve the saved list and show the sum calculated from it.
+        let result = retrieveOrUpdateNumbers();
+        let enteredNumbers = result.enteredNumbers;
+        numberList.textContent = enteredNumbers.join(' + ');
+        totalSum.textContent = result.sum;
     
         addButton.addEventListener('click', function () {
             const number = numberInput.value.trim();
@@ -41,10 +66,11 @@
 
             const numValue = parseInt(number, 10);
             enteredNumbers.push(numValue);
-            sum += numValue;
 
+            // Update the saved list, then show the sum calculated from it.
+            result = retrieveOrUpdateNumbers(enteredNumbers);
             numberList.textContent = enteredNumbers.join(' + ');
-            totalSum.textContent = sum;
+            totalSum.textContent = result.sum;
 
             numberInput.value = '';
             numberInput.focus();
