@@ -1,5 +1,18 @@
 const STORAGE_KEY = 'persistedAddition.numbers';
 
+function isValidInteger(input) {
+  return /^-?\d+$/.test(String(input).trim());
+}
+
+function readNumbers(storage) {
+  try {
+    const parsed = JSON.parse(storage.getItem(STORAGE_KEY));
+    return Array.isArray(parsed) ? parsed.map(Number).filter(Number.isInteger) : [];
+  } catch (error) {
+    return [];
+  }
+}
+
 function formatNumbers(numbers) {
   return numbers.join(' + ');
 }
@@ -8,35 +21,34 @@ function summarizeNumbers(numbers) {
   return numbers.reduce((sum, value) => sum + value, 0);
 }
 
-function readAndWritePersistedNumbers(numbers, storage = globalThis.localStorage) {
-  const safeNumbers = Array.isArray(numbers) ? numbers.map(Number) : [];
+function readAndWritePersistedNumbers(newNumber, storage = globalThis.localStorage) {
+  const numbers = readNumbers(storage);
 
-  if (storage && typeof storage.setItem === 'function') {
-    storage.setItem(STORAGE_KEY, JSON.stringify(safeNumbers));
+  if (newNumber !== undefined) {
+    if (!isValidInteger(newNumber)) {
+      throw new Error('Please enter a valid integer.');
+    }
+    numbers.push(parseInt(newNumber, 10));
+    storage.setItem(STORAGE_KEY, JSON.stringify(numbers));
   }
 
   return {
-    values: safeNumbers,
-    display: formatNumbers(safeNumbers),
-    sum: summarizeNumbers(safeNumbers)
+    values: numbers,
+    display: formatNumbers(numbers),
+    sum: summarizeNumbers(numbers)
   };
 }
 
-const api = {
+const storageManagerService = {
   STORAGE_KEY,
+  isValidInteger,
   formatNumbers,
   summarizeNumbers,
   readAndWritePersistedNumbers
 };
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = api;
-}
-
-if (typeof window !== 'undefined') {
-  window.persistedAddition = api;
-}
-
-if (typeof globalThis !== 'undefined') {
-  globalThis.persistedAddition = api;
+  module.exports = storageManagerService;
+} else {
+  window.storageManagerService = storageManagerService;
 }
